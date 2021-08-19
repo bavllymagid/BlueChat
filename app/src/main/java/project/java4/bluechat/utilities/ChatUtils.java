@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+
 import project.java4.bluechat.UI.MainActivity;
 
 public class ChatUtils {
@@ -51,12 +52,6 @@ public class ChatUtils {
         connectedDevice = bluetoothDevice;
         clientClass = new ClientClass(bluetoothDevice);
         clientClass.start();
-
-        Message message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
-        Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.DEVICE_NAME, connectedDevice.getName());
-        message.setData(bundle);
-        handler.sendMessage(message);
 
         setState(STATE_CONNECTED);
     }
@@ -119,6 +114,12 @@ public class ChatUtils {
 
                     sendReceive=new SendReceive(socket);
                     sendReceive.start();
+
+                    message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MainActivity.DEVICE_NAME, connectedDevice.getName());
+                    message.setData(bundle);
+                    handler.sendMessage(message);
 
                     break;
                 }
@@ -201,6 +202,13 @@ public class ChatUtils {
                 try {
                     bytes=inputStream.read(buffer);
                     handler.obtainMessage(STATE_MESSAGE_RECEIVED,bytes,-1,buffer).sendToTarget();
+
+                    Message message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MainActivity.DEVICE_NAME, connectedDevice.getName());
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

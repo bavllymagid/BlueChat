@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     setState("Connecting");
                     break;
                 case STATE_CONNECTED:
-                    setState("Connected");
+                    setState("Connected to " + connectedDevice);
                     break;
                 case STATE_CONNECTION_FAILED:
                     setState("Connection Failed");
