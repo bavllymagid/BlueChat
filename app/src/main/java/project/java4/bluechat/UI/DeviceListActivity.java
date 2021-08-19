@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Set;
 
 import project.java4.bluechat.R;
+import project.java4.bluechat.utilities.ChatUtils;
 
 public class DeviceListActivity extends AppCompatActivity {
     private ListView listPairedDevices, listAvailableDevices;
@@ -70,9 +71,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        /*
-            to list all the paired devices
-        */
+
         if (pairedDevices != null && pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
                 adapterPairedDevices.add(device.getName() + "\n" + device.getAddress());
@@ -96,7 +95,6 @@ public class DeviceListActivity extends AppCompatActivity {
 
                 Intent intent = new Intent();
                 intent.putExtra("deviceAddress", address);
-                intent.putExtra("deviceName", info);
 
                 setResult(Activity.RESULT_OK, intent);
                 finish();
