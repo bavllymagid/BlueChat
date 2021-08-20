@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
         init();
         initBluetooth();
         chatUtils = new ChatUtils(handler);
+
+        chatUtils.start();
     }
 
     private void init() {
@@ -121,9 +123,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = edCreateMessage.getText().toString();
-                if (!message.isEmpty()) {
-                    edCreateMessage.setText("");
-                    chatUtils.write(message.getBytes());
+                if(chatUtils.getState() != ChatUtils.STATE_LISTEN) {
+                    if (!message.isEmpty()) {
+                        edCreateMessage.setText("");
+                        chatUtils.write(message.getBytes());
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), "You're not connected please make a connection", Toast.LENGTH_SHORT).show();
                 }
             }
         });

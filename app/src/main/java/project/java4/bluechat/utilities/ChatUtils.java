@@ -51,7 +51,7 @@ public class ChatUtils {
         handler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGED, state, -1).sendToTarget();
     }
 
-    private synchronized void start() {
+    public synchronized void start() {
         if (connectThread != null) {
             connectThread.cancel();
             connectThread = null;
@@ -87,6 +87,8 @@ public class ChatUtils {
 
         setState(STATE_NONE);
     }
+
+
 
     public void connect(BluetoothDevice device) {
         if (state == STATE_CONNECTING) {
@@ -247,7 +249,7 @@ public class ChatUtils {
             byte[] buffer = new byte[1024];
             int bytes;
 
-            while (true)
+            while (connectedThread != null)
             {
                 try {
                     bytes=inputStream.read(buffer);
@@ -283,6 +285,7 @@ public class ChatUtils {
         bundle.putString(MainActivity.TOAST, "Connection Lost");
         message.setData(bundle);
         handler.sendMessage(message);
+
 
         ChatUtils.this.start();
     }
