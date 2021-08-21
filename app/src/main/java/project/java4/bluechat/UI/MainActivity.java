@@ -1,7 +1,6 @@
 package project.java4.bluechat.UI;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         edCreateMessage = findViewById(R.id.ed_enter_message);
         btnSendMessage = findViewById(R.id.btn_send_msg);
 
-        adapterMainChat = new ArrayAdapter<String>(context, R.layout.message_layout);
+        adapterMainChat = new ArrayAdapter<String>(context, R.layout.chat_layout);
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
