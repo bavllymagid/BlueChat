@@ -56,7 +56,7 @@ public class messageAdapter extends BaseAdapter {
             convertView.setTag(holder);
             holder.name = (TextView) convertView.findViewById(R.id.tv_name);
             holder.messageBody.setText(message.getText());
-            holder.name.setText(message.getName());
+            
 
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.theirmessage, null);
