@@ -121,17 +121,19 @@ public class MainActivity extends AppCompatActivity {
         initBluetooth();
         chatUtils = new ChatUtils(handler);
 
-        if(!bluetoothAdapter.isEnabled() && bluetoothAdapter != null) {
-            enableBluetooth();
-            try {
-                Thread.sleep(1000);
+        if( bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                enableBluetooth();
+                try {
+                    Thread.sleep(1000);
 
+                    chatUtils.start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else{
                 chatUtils.start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }else if(bluetoothAdapter != null) {
-            chatUtils.start();
         }
         else {
             Toast.makeText(context, "There's no bluetooth on this device", Toast.LENGTH_SHORT).show();
