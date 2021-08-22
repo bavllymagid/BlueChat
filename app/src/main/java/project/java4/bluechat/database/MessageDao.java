@@ -16,7 +16,7 @@ public interface MessageDao {
     void Insert(Message message);
 
     @Query("SELECT * FROM Message")
-    LiveData<List<Message>> getAll();
+    List<Message> getAll();
     @Query("SELECT * FROM Message WHERE user_id = :user_id AND conv_id = :conv_id")
-    LiveData<List<Message>> getAll(long user_id, long conv_id);
+    List<Message> getAll(long user_id, long conv_id);
 }

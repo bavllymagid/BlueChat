@@ -19,17 +19,17 @@ public interface ConverstaionDao {
     void insert(Conversation conversation);
 
     @Query("SELECT * FROM Conversation")
-    LiveData<List<Conversation>> getAll();
+    List<Conversation> getAll();
 
     @Delete
     void delete(Conversation conversation);
 
     @Transaction
     @Query("SELECT * FROM Conversation")
-    public LiveData<List<ConversationWithUsers>> getAllConverstaionParticipant();
+    public List<ConversationWithUsers> getAllConversationParticipant();
 
     @Transaction
     @Query("SELECT * FROM Conversation WHERE conv_id = :id")
-    public LiveData<List<ConversationWithUsers>> getConverstaionParticipants(long id);
+    public List<ConversationWithUsers> getConversationParticipants(long id);
 
 }

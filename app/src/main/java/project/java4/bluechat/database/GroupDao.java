@@ -17,7 +17,7 @@ public interface GroupDao {
     void insert(Group group);
 
     @Query("SELECT * FROM `group`")
-    LiveData<List<Group>> getAll();
+    List<Group> getAll();
 
     @Query("SELECT * FROM `group` WHERE conv_id = :id")
     Group getGroup(long id);
