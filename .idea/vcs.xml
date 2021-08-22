@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BlueChat" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/app/src/main/java/project/java4/bluechat" vcs="Git" />
+    <mapping directory="/mnt/5022048A220476EE/Work/Programming/Android/Projects/BlueChat" vcs="Git" />
   </component>
 </project>
