@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -53,15 +54,16 @@ public class messageAdapter extends BaseAdapter {
             convertView = messageInflater.inflate(R.layout.mymessage, null);
             holder.messageBody = (TextView) convertView.findViewById(R.id.my_txt);
             convertView.setTag(holder);
+            holder.imageMessage = (ImageView)  convertView.findViewById(R.id.my_img);
             holder.messageBody.setText(message.getText());
+            holder.name.setText(message.getName());
+
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.theirmessage, null);
-
+            holder.imageMessage = (ImageView)  convertView.findViewById(R.id.their_img);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
             convertView.setTag(holder);
-
-
             holder.name.setText(message.getName());
             holder.messageBody.setText(message.getText());
 
@@ -71,7 +73,7 @@ public class messageAdapter extends BaseAdapter {
     }
 
     class MessageViewHolder {
-
+        public ImageView imageMessage;
         public TextView name;
         public TextView messageBody;
     }
