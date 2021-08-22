@@ -52,21 +52,19 @@ public class messageAdapter extends BaseAdapter {
 
         if (message.isBelongsToCurrentUser()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.mymessage, null);
-            holder.messageBody = (TextView) convertView.findViewById(R.id.my_txt);
+            holder.messageBody = (TextView) convertView.findViewById(R.id.tv_text);
             convertView.setTag(holder);
-            holder.imageMessage = (ImageView)  convertView.findViewById(R.id.my_img);
+            holder.name = (TextView) convertView.findViewById(R.id.tv_name);
             holder.messageBody.setText(message.getText());
             holder.name.setText(message.getName());
 
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.theirmessage, null);
-            holder.imageMessage = (ImageView)  convertView.findViewById(R.id.their_img);
-            holder.name = (TextView) convertView.findViewById(R.id.name);
-            holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
+            holder.name = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.messageBody = (TextView) convertView.findViewById(R.id.tv_text);
             convertView.setTag(holder);
             holder.name.setText(message.getName());
             holder.messageBody.setText(message.getText());
-
         }
 
         return convertView;
