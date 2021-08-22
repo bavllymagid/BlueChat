@@ -56,7 +56,7 @@ public class messageAdapter extends BaseAdapter {
             convertView.setTag(holder);
             holder.imageMessage = (ImageView)  convertView.findViewById(R.id.my_img);
             holder.messageBody.setText(message.getText());
-            holder.name.setText(message.getName());
+            
 
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.theirmessage, null);
