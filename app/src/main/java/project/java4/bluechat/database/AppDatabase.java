@@ -25,7 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getDatabase(final Context context) {
         if(instance == null)
-                instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Bluechat_DB").fallbackToDestructiveMigration().build();
+                instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Bluechat_DB").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         return instance;
     }
 
