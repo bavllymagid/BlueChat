@@ -21,7 +21,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
+                    android:background="@drawable/their_message"
                     android:minWidth="128dp"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -32,6 +32,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
                             android:textSize="10sp"
+                            android:textColor="@color/white"
                             tools:text="12:07" />
 
                         <TextView
@@ -39,9 +40,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="end"
+                            android:textColor="@color/white"
                             android:textIsSelectable="true"
                             tools:text="@tools:sample/lorem" />
 
                 </LinearLayout>
         </androidx.cardview.widget.CardView>
+
 </FrameLayout>

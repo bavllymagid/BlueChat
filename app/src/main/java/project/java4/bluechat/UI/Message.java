@@ -6,22 +6,17 @@ import android.widget.ImageView;
 public class Message {
     private String text;
     private String name;
-    private ImageView image;
     private boolean belongsToCurrentUser;
 
-    public Message(String text, String name, boolean belongsToCurrentUser, ImageView image) {
+    public Message(String text, String name, boolean belongsToCurrentUser) {
         this.text = text;
         this.name = name;
-        this.image = image;
         this.belongsToCurrentUser = belongsToCurrentUser;
     }
     public String getText() {
         return text;
     }
 
-    public ImageView getImage() {
-        return image;
-    }
 
     public String getName() {
         return name;

@@ -71,7 +71,7 @@ public class messageAdapter extends BaseAdapter {
     }
 
     class MessageViewHolder {
-        public ImageView imageMessage;
+
         public TextView name;
         public TextView messageBody;
     }
