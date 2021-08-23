@@ -30,7 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract UserDao userOperations();
-    public abstract ConverstaionDao conversationOperations();
+    public abstract ConversationDao conversationOperations();
     public abstract GroupDao groupOperations();
     public abstract MessageDao messageOperations();
 }
