@@ -14,7 +14,7 @@ import project.java4.bluechat.model.Conversation;
 import project.java4.bluechat.model.ConversationWithUsers;
 
 @Dao
-public interface ConverstaionDao {
+public interface ConversationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Conversation conversation);
 

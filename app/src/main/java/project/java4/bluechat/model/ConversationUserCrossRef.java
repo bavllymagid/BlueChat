@@ -9,5 +9,6 @@ import androidx.room.PrimaryKey;
 @Entity(primaryKeys = {"conv_id", "user_id"},indices = {@Index("conv_id"), @Index("user_id")})
 public class ConversationUserCrossRef {
     long conv_id;
-    long user_id;
+    @NonNull
+    String user_id;
 }

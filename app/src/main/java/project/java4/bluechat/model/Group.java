@@ -15,7 +15,7 @@ import androidx.room.Index;
 },indices = {@Index(value = "admin_id")})
 public class Group extends Conversation {
     @ColumnInfo(name = "admin_id")
-    long adminId;
+    String adminId;
     @ColumnInfo
     String name;
     @ColumnInfo(name = "photo_path")
@@ -25,11 +25,11 @@ public class Group extends Conversation {
         isGroup = true;
     }
 
-    public long getAdminId() {
+    public String getAdminId() {
         return adminId;
     }
 
-    public void setAdminId(long adminId) {
+    public void setAdminId(String adminId) {
         this.adminId = adminId;
     }
 
