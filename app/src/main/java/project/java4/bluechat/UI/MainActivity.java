@@ -1,7 +1,6 @@
 package project.java4.bluechat.UI;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,13 +8,20 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +31,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -36,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private ListView listMainChat;
     private EditText edCreateMessage;
     private Button btnSendMessage;
+    private Button btnSendImage;
     private ArrayAdapter<String> adapterMainChat;
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
+    private final int STORAGE_PERMISSION_REQUEST = 103;
     private final int SELECT_DEVICE = 102;
+    private static final int RESULT_LOAD_IMG = 200;
 
     public static final int MESSAGE_STATE_CHANGED = 0;
     public static final int MESSAGE_READ = 1;
@@ -79,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-                    adapterMainChat.add(connectedDevice + ": " + inputBuffer);
+                    adapterMainChat.add(connectedDevice + ": "+inputBuffer);
                     break;
                 case MESSAGE_DEVICE_NAME:
                     connectedDevice = message.getData().getString(DEVICE_NAME);
@@ -108,13 +121,30 @@ public class MainActivity extends AppCompatActivity {
         initBluetooth();
         chatUtils = new ChatUtils(handler);
 
-        chatUtils.start();
+        if( bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                enableBluetooth();
+                try {
+                    Thread.sleep(1000);
+
+                    chatUtils.start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else{
+                chatUtils.start();
+            }
+        }
+        else {
+            Toast.makeText(context, "There's no bluetooth on this device", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void init() {
         listMainChat = findViewById(R.id.list_conversation);
         edCreateMessage = findViewById(R.id.ed_enter_message);
         btnSendMessage = findViewById(R.id.btn_send_msg);
+        btnSendImage = findViewById(R.id.btn_send_image);
 
         adapterMainChat = new ArrayAdapter<String>(context, R.layout.message_layout);
         listMainChat.setAdapter(adapterMainChat);
@@ -131,6 +161,13 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(getApplicationContext(), "You're not connected please make a connection", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        btnSendImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPhotoPermission();
             }
         });
     }
@@ -162,6 +199,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void  checkPhotoPermission(){
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST);
+        }else {
+            getImageFromGallery();
+        }
+    }
+
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
@@ -177,6 +222,22 @@ public class MainActivity extends AppCompatActivity {
             String address = data.getStringExtra("deviceAddress");
             chatUtils.connect(bluetoothAdapter.getRemoteDevice(address));
         }
+
+//        if(requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK){
+//            try {
+//                final Uri imageUri = data.getData();
+//                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+//                final Bitmap image = BitmapFactory.decodeStream(imageStream);
+//                final ByteArrayOutputStream outImgStream = new ByteArrayOutputStream();
+//                image.compress(Bitmap.CompressFormat.JPEG, 50, outImgStream);
+//                final byte[] imageBytes = outImgStream.toByteArray();
+//                Pair<String, byte[]> pair = new Pair<>("", imageBytes) ;
+//                adapterMainChat.add(pair);
+//                chatUtils.write(imageBytes);
+//            }catch (FileNotFoundException e){
+//                e.printStackTrace();
+//            }
+//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -187,9 +248,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, DeviceListActivity.class);
                 startActivityForResult(intent, SELECT_DEVICE);
             } else {
-                new AlertDialog.Builder(context)
+                new AlertDialog.Builder(this)
                         .setCancelable(false)
-                        .setMessage("Location permission is required.\n Please grant")
+                        .setMessage("Location permission is required.\nPlease grant")
                         .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -203,12 +264,34 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }).show();
             }
-        } else {
+        }
+        else if(requestCode == STORAGE_PERMISSION_REQUEST){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getImageFromGallery();
+            }else {
+                new AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setMessage("Memory permission is required.\nPlease grant")
+                        .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                checkPhotoPermission();
+                            }
+                        })
+                        .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.this.finish();
+                            }
+                        }).show();
+            }
+        }
+        else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
-    private void enableBluetooth() {
+    private void enableBluetooth(){
         if (!bluetoothAdapter.isEnabled()) {
             bluetoothAdapter.enable();
         }
@@ -218,6 +301,20 @@ public class MainActivity extends AppCompatActivity {
             discoveryIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             startActivity(discoveryIntent);
         }
+
+        try {
+            Thread.sleep(1000);
+            if(bluetoothAdapter.isEnabled())
+               chatUtils.start();
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getImageFromGallery(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
     @Override

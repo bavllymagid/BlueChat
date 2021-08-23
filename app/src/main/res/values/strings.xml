@@ -9,5 +9,6 @@
     <string name="str_available_devices">Available Devices</string>
     <string name="str_menu_scan_devices">Scan Devices</string>
     <string name="start_server">Start Server</string>
-    
+    <string name="str_label_btn_send_image">Send Image</string>
+
 </resources>
