@@ -1,4 +1,4 @@
-package project.java4.bluechat.UI;
+package project.java4.bluechat.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -8,33 +8,22 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import project.java4.bluechat.adapters.messageAdapter;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -46,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listMainChat;
     private EditText edCreateMessage;
     private Button btnSendMessage;
-    private Button btnSendImage;
-    private ArrayAdapter<String> adapterMainChat;
+    private messageAdapter adapterMainChat;
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
     private final int STORAGE_PERMISSION_REQUEST = 103;
@@ -87,12 +75,13 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    adapterMainChat.add("Me: " + outputBuffer);
+                    project.java4.bluechat.model.Message foo = new project.java4.bluechat.model.Message();
+                    adapterMainChat.add(foo);
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-                    adapterMainChat.add(connectedDevice + ": "+inputBuffer);
+                    adapterMainChat.add(new project.java4.bluechat.model.Message(inputBuffer, connectedDevice));
                     break;
                 case MESSAGE_DEVICE_NAME:
                     connectedDevice = message.getData().getString(DEVICE_NAME);
@@ -144,9 +133,8 @@ public class MainActivity extends AppCompatActivity {
         listMainChat = findViewById(R.id.list_conversation);
         edCreateMessage = findViewById(R.id.ed_enter_message);
         btnSendMessage = findViewById(R.id.btn_send_msg);
-        btnSendImage = findViewById(R.id.btn_send_image);
 
-        adapterMainChat = new ArrayAdapter<String>(context, R.layout.message_layout);
+        adapterMainChat = new messageAdapter(context);
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
@@ -161,13 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(getApplicationContext(), "You're not connected please make a connection", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        btnSendImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPhotoPermission();
             }
         });
     }

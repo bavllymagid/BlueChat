@@ -3,16 +3,14 @@ package project.java4.bluechat.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity(foreignKeys = {@ForeignKey(entity = User.class,
-        parentColumns = "user_id",
-        childColumns = "user_id",
-        onDelete = ForeignKey.CASCADE),
+@Entity(foreignKeys = {
 @ForeignKey(entity = Conversation.class,
         parentColumns = "conv_id",
         childColumns = "conv_id",
@@ -22,13 +20,23 @@ public class Message {
     @PrimaryKey
     private long id;
     @ColumnInfo(name = "user_id")
-    private long userId;
+    private String userId;
     @ColumnInfo(name = "conv_id")
     private long convId;
     @ColumnInfo
     private String content;
     @ColumnInfo(name = "time_sent")
     private Date timeSent;
+
+    @Ignore
+    public Message(String content, String macAddress) {
+        this.content = content;
+        this.userId = macAddress;
+    }
+
+    public Message() {
+
+    }
 
     public long getId() {
         return id;
@@ -38,11 +46,11 @@ public class Message {
         this.id = id;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

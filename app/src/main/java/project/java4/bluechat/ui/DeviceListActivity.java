@@ -1,4 +1,4 @@
-package project.java4.bluechat.UI;
+package project.java4.bluechat.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -11,10 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Set;
 
 import project.java4.bluechat.R;
-import project.java4.bluechat.utilities.ChatUtils;
 
 public class DeviceListActivity extends AppCompatActivity {
     private ListView listPairedDevices, listAvailableDevices;
