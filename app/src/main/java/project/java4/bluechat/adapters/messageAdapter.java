@@ -1,4 +1,4 @@
-package project.java4.bluechat.ui;
+package project.java4.bluechat.adapters;
 
 import android.app.Activity;
 import android.content.Context;
