@@ -20,11 +20,9 @@ import project.java4.bluechat.model.Message;
 public class messageAdapter extends BaseAdapter {
     List<Message> messages = new ArrayList<Message>();
     Context context;
-    BluetoothAdapter bluetoothAdapter;
 
-    public messageAdapter(Context context, BluetoothAdapter bluetoothAdapter) {
+    public messageAdapter(Context context) {
         this.context = context;
-        this.bluetoothAdapter = bluetoothAdapter;
     }
 
     public void setMessages(List<Message> messages) {
@@ -53,7 +51,7 @@ public class messageAdapter extends BaseAdapter {
         Message message = messages.get(i);
 
 
-        if (message.getConvId().equals(bluetoothAdapter.getAddress())) { // this message was sent by us so let's create a basic chat bubble on the right
+        if (message.isMyMessage()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.mymessage, null);
             holder.messageBody = (TextView) convertView.findViewById(R.id.tv_text);
             convertView.setTag(holder);

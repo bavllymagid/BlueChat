@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    Conversation conv = new Conversation();
-                    conv.setId(bluetoothAdapter.getAddress());
+                    Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
                     AppDatabase.getDatabase(context).conversationOperations().insert(conv);
                     project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, connectedDeviceAddress, true);
                     AppDatabase.getDatabase(context).messageOperations().insert(msg);
@@ -94,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-                    Conversation conv1 = new Conversation();
-                    conv1.setId(connectedDeviceAddress);
+                    Conversation conv1 = new Conversation(connectedDeviceAddress, connectedDeviceName);
                     AppDatabase.getDatabase(context).conversationOperations().insert(conv1);
                     project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress, false);
                     AppDatabase.getDatabase(context).messageOperations().insert(msg1);
@@ -136,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btn_send_msg);
         btnSendImage = findViewById(R.id.btn_send_image);
 
-        adapterMainChat = new messageAdapter(context, bluetoothAdapter);
+        adapterMainChat = new messageAdapter(context);
 
         AppDatabase.getDatabase(context).messageOperations().getAll().observe(this, new Observer<List<project.java4.bluechat.model.Message>>() {
             @Override
