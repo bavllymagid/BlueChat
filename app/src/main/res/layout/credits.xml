@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <Button
+        android:id="@+id/button"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:background="@drawable/credits_button"
+        android:textSize="14sp"
+        android:padding="44dp"
+        android:text="Show
+        Credits"
+        android:layout_width = "150dp"
+        android:layout_height = "150dp"
+        android:textColor="@color/white"></Button>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:layout_marginLeft="150dp"
+        android:textSize="20dp"
+        android:textColor="#0000FF"
+
+        android:id="@+id/List_of_credits"/>
+
+
+</RelativeLayout>
