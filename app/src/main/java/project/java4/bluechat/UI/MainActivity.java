@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private messageAdapter adapterMainChat;
 
-
     private final int LOCATION_PERMISSION_REQUEST = 101;
     private final int STORAGE_PERMISSION_REQUEST = 103;
     private final int SELECT_DEVICE = 102;
@@ -53,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_TOAST = 4;
 
     public static final String DEVICE_NAME = "deviceName";
+    public static final String DEVICE_ADDRESS = "deviceAddress";
     public static final String TOAST = "toast";
-    private String connectedDevice;
+    private String connectedDeviceName;
+    private String connectedDeviceAddress;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                             setState("Connecting...");
                             break;
                         case ChatUtils.STATE_CONNECTED:
-                            setState("Connected: " + connectedDevice);
+                            setState("Connected: " + connectedDeviceName);
                             break;
                     }
                     break;
@@ -86,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
                     String inputBuffer = new String(buffer, 0, message.arg1);
 
 
-                    adapterMainChat.add(new project.java4.bluechat.ui.Message(inputBuffer, connectedDevice, false));
+                    adapterMainChat.add(new project.java4.bluechat.ui.Message(inputBuffer, connectedDeviceName, false));
 
                     break;
                 case MESSAGE_DEVICE_NAME:
-                    connectedDevice = message.getData().getString(DEVICE_NAME);
-                    Toast.makeText(context, connectedDevice, Toast.LENGTH_SHORT).show();
+                    connectedDeviceName = message.getData().getString(DEVICE_NAME);
+                    connectedDeviceAddress = message.getData().getString(DEVICE_ADDRESS);
+                    Toast.makeText(context, connectedDeviceName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, connectedDeviceAddress, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(context, message.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
