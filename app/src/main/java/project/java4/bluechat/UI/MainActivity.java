@@ -127,9 +127,21 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
+
+
         init();
         initBluetooth();
-//        getTheme();
+
+        Conversation conv = new Conversation("DUMMY", "shshs");
+        AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+        project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message("dummy", "DUMMY", true);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message("dummy1", "DUMMY", false);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg2 = new project.java4.bluechat.model.Message("dummy2", "DUMMY", true);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg3 = new project.java4.bluechat.model.Message("dummy3", "DUMMY", false);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
     }
 
     private void init() {
