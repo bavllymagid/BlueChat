@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import project.java4.bluechat.preferences.SettingsActivity;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -156,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_enable_bluetooth:
                 enableBluetooth();
+                return true;
+            case R.id.menu_settings:
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

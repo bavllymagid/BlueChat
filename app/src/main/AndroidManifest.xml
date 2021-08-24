@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="project.java4.bluechat">
+    package="project.java4.bluechat" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +12,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".UI.DeviceListActivity"></activity>
-        <activity android:name=".UI.MainActivity">
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".preferences.SettingsActivity"
+            android:label="@string/pref_menu_label"
+            android:parentActivityName=".UI.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UI.MainActivity"/>
+
+        </activity>
+        <activity android:name=".UI.DeviceListActivity" />
+        <activity android:name=".UI.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
