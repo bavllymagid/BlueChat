@@ -1,4 +1,4 @@
-<resources  xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">BlueChat</string>
     <string name="name">name</string>
     <string name="str_label_btn_send">Send</string>
@@ -12,9 +12,9 @@
     <string name="str_label_btn_send_image">Send Image</string>
 
 
-<!-- preferences -->
+    <!-- preferences -->
     <string name="pref_menu_label">Settings</string>
-<!--font size list preference-->
+    <!--font size list preference-->
     <string name="pref_font_size_label">Font size</string>
     <string name="pref_font_size_key" translatable="false">fontSize</string>
     <!--    font labels-->
@@ -25,7 +25,7 @@
     <string name="pref_font_size_small_value" translatable="false">small</string>
     <string name="pref_font_size_medium_value" translatable="false">medium</string>
     <string name="pref_font_size_large_value" translatable="false">large</string>
-<!--theme color list preference-->
+    <!--theme color list preference-->
     <string name="pref_theme_color_label">Theme color</string>
     <string name="pref_theme_color_key" translatable="false">themeColor</string>
     <!--    theme labels-->
