@@ -7,35 +7,61 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity(foreignKeys = {
-@ForeignKey(entity = Conversation.class,
-        parentColumns = "conv_id",
+        @ForeignKey(entity = Conversation.class,
+        parentColumns = "id",
         childColumns = "conv_id",
-        onDelete = ForeignKey.CASCADE)},
-indices = {@Index("user_id"), @Index("conv_id")})
+        onDelete = ForeignKey.CASCADE)
+},
+indices = { @Index("conv_id") })
 public class Message {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
-    @ColumnInfo(name = "user_id")
-    private String userId;
+
     @ColumnInfo(name = "conv_id")
-    private long convId;
+    private String convId;
+
+    @ColumnInfo
+    boolean isMyMessage;
+
     @ColumnInfo
     private String content;
+
     @ColumnInfo(name = "time_sent")
     private Date timeSent;
 
     @Ignore
-    public Message(String content, String macAddress) {
+    public Message(String content, String convId, boolean isMyMessage) {
         this.content = content;
-        this.userId = macAddress;
+        this.convId = convId;
+        this.isMyMessage = isMyMessage;
+        this.timeSent = Calendar.getInstance().getTime();
     }
 
     public Message() {
+        this.timeSent = Calendar.getInstance().getTime();
+    }
 
+    public boolean isMyMessage() {
+        return isMyMessage;
+    }
+
+    public void setMyMessage(boolean myMessage) {
+        isMyMessage = myMessage;
+    }
+
+    public String getConvId() {
+        return convId;
+    }
+
+    public void setConvId(String convId) {
+        this.convId = convId;
     }
 
     public long getId() {
@@ -44,22 +70,6 @@ public class Message {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public long getConvId() {
-        return convId;
-    }
-
-    public void setConvId(long convId) {
-        this.convId = convId;
     }
 
     public String getContent() {

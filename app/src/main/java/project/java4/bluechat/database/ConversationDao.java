@@ -1,5 +1,6 @@
 package project.java4.bluechat.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -17,17 +18,11 @@ public interface ConversationDao {
     void insert(Conversation conversation);
 
     @Query("SELECT * FROM Conversation")
-    List<Conversation> getAll();
+    LiveData<List<Conversation>> getAll();
+
+    @Query("SELECT * FROM Conversation WHERE id=:id")
+    Conversation get(String id);
 
     @Delete
     void delete(Conversation conversation);
-
-    @Transaction
-    @Query("SELECT * FROM Conversation")
-    public List<ConversationWithUsers> getAllConversationParticipant();
-
-    @Transaction
-    @Query("SELECT * FROM Conversation WHERE conv_id = :id")
-    public List<ConversationWithUsers> getConversationParticipants(long id);
-
 }

@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 
-import project.java4.bluechat.ui.MainActivity;
+import project.java4.bluechat.UI.MainActivity;
 
 public class ChatUtils {
     private final Handler handler;
@@ -309,6 +309,7 @@ public class ChatUtils {
         Message message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.DEVICE_NAME, device.getName());
+        bundle.putString(MainActivity.DEVICE_ADDRESS, device.getAddress());
         message.setData(bundle);
         handler.sendMessage(message);
 

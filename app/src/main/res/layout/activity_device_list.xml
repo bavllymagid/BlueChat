@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="project.java4.bluechat.ui.DeviceListActivity">
+    tools:context="project.java4.bluechat.UI.DeviceListActivity">
 
     <ProgressBar
         android:id="@+id/progress_scan_devices"

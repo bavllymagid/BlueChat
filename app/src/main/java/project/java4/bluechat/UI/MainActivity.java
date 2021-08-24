@@ -1,17 +1,21 @@
-package project.java4.bluechat.ui;
+package project.java4.bluechat.UI;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +27,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import project.java4.bluechat.preferences.SettingsActivity;
+import java.util.List;
+
 import project.java4.bluechat.adapters.messageAdapter;
+import project.java4.bluechat.database.AppDatabase;
+import project.java4.bluechat.model.Conversation;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -35,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView listMainChat;
     private EditText edCreateMessage;
     private Button btnSendMessage;
+
+    private Button btnSendImage;
+
     private messageAdapter adapterMainChat;
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
@@ -49,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_TOAST = 4;
 
     public static final String DEVICE_NAME = "deviceName";
+    public static final String DEVICE_ADDRESS = "deviceAddress";
     public static final String TOAST = "toast";
-    private String connectedDevice;
+    private String connectedDeviceName;
+    private String connectedDeviceAddress;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -68,24 +82,31 @@ public class MainActivity extends AppCompatActivity {
                             setState("Connecting...");
                             break;
                         case ChatUtils.STATE_CONNECTED:
-                            setState("Connected: " + connectedDevice);
+                            setState("Connected: " + connectedDeviceName);
                             break;
                     }
                     break;
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    project.java4.bluechat.model.Message foo = new project.java4.bluechat.model.Message();
-                    adapterMainChat.add(foo);
+                    Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
+                    AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+                    project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, connectedDeviceAddress, true);
+                    AppDatabase.getDatabase(context).messageOperations().insert(msg);
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-                    adapterMainChat.add(new project.java4.bluechat.model.Message(inputBuffer, connectedDevice));
+                    Conversation conv1 = new Conversation(connectedDeviceAddress, connectedDeviceName);
+                    AppDatabase.getDatabase(context).conversationOperations().insert(conv1);
+                    project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress, false);
+                    AppDatabase.getDatabase(context).messageOperations().insert(msg1);
                     break;
                 case MESSAGE_DEVICE_NAME:
-                    connectedDevice = message.getData().getString(DEVICE_NAME);
-                    Toast.makeText(context, connectedDevice, Toast.LENGTH_SHORT).show();
+                    connectedDeviceName = message.getData().getString(DEVICE_NAME);
+                    connectedDeviceAddress = message.getData().getString(DEVICE_ADDRESS);
+                    Toast.makeText(context, connectedDeviceName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, connectedDeviceAddress, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(context, message.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
@@ -106,35 +127,40 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
+
+
         init();
         initBluetooth();
-        chatUtils = new ChatUtils(handler);
 
-        if( bluetoothAdapter != null) {
-            if (!bluetoothAdapter.isEnabled()) {
-                enableBluetooth();
-                try {
-                    Thread.sleep(1000);
-
-                    chatUtils.start();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else{
-                chatUtils.start();
-            }
-        }
-        else {
-            Toast.makeText(context, "There's no bluetooth on this device", Toast.LENGTH_SHORT).show();
-        }
+        Conversation conv = new Conversation("DUMMY", "shshs");
+        AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+        project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message("dummy", "DUMMY", true);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message("dummy1", "DUMMY", false);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg2 = new project.java4.bluechat.model.Message("dummy2", "DUMMY", true);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
+        project.java4.bluechat.model.Message msg3 = new project.java4.bluechat.model.Message("dummy3", "DUMMY", false);
+        AppDatabase.getDatabase(context).messageOperations().insert(msg);
     }
 
     private void init() {
+        chatUtils = new ChatUtils(handler);
         listMainChat = findViewById(R.id.list_conversation);
         edCreateMessage = findViewById(R.id.ed_enter_message);
         btnSendMessage = findViewById(R.id.btn_send_msg);
+        btnSendImage = findViewById(R.id.btn_send_image);
 
         adapterMainChat = new messageAdapter(context);
+
+        AppDatabase.getDatabase(context).messageOperations().getAll().observe(this, new Observer<List<project.java4.bluechat.model.Message>>() {
+            @Override
+            public void onChanged(List<project.java4.bluechat.model.Message> messages) {
+                adapterMainChat.setMessages(messages);
+                adapterMainChat.notifyDataSetChanged();
+            }
+        });
+
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
@@ -151,11 +177,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnSendImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPhotoPermission();
+            }
+        });
     }
 
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
+        if (bluetoothAdapter != null) {
+            if(!bluetoothAdapter.isEnabled()) {
+                enableBluetooth();
+                try {
+                    Thread.sleep(1000);
+
+                    chatUtils.start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                chatUtils.start();
+            }
+        }else {
             Toast.makeText(context, "No bluetooth found", Toast.LENGTH_SHORT).show();
         }
     }
@@ -174,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_enable_bluetooth:
                 enableBluetooth();
+                return true;
+            case R.id.menu_settings:
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -305,4 +355,30 @@ public class MainActivity extends AppCompatActivity {
             chatUtils.stop();
         }
     }
+
+    private int getCurrTheme(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String themeString = sharedPreferences.getString(getString(R.string.pref_theme_color_key), getString(R.string.pref_theme_color_purple_value));
+        if(themeString.equals(getString(R.string.pref_theme_color_purple_value))){
+            return R.style.AppTheme;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_dark_blue_value))){
+            return R.style.AppThemeDarkBlue;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_vibrant_blue_value))){
+            return R.style.AppThemeVibrantBlue;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_grey_value))){
+            return R.style.AppThemeGrey;
+        }
+        return R.style.AppTheme;
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme =  super.getTheme();
+        theme.applyStyle(getCurrTheme(), true);
+        return theme;
+    }
+
 }

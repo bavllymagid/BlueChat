@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_bluetooth_connected"
         android:title="@string/start_server"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/pref_menu_label"
+        app:showAsAction="never" />
 </menu>

@@ -12,13 +12,13 @@ import project.java4.bluechat.model.Message;
 
 @Dao
 public interface MessageDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void Insert(Message message);
+    void insert(Message message);
 
     @Query("SELECT * FROM Message")
-    List<Message> getAll();
-    @Query("SELECT * FROM Message WHERE user_id = :user_id AND conv_id = :conv_id")
-    List<Message> getAll(long user_id, long conv_id);
+    LiveData<List<Message>> getAll();
+
     @Query("SELECT * FROM Message WHERE conv_id=:conv_id")
-    List<Message> getAllFromConversation(long conv_id);
+    LiveData<List<Message>> getAllFromConversation(long conv_id);
 }
