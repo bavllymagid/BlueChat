@@ -12,11 +12,13 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
 
-import project.java4.bluechat.UI.MainActivity;
+import project.java4.bluechat.ui.MainActivity;
 
 public class ChatUtils {
     private final Handler handler;
@@ -32,6 +34,7 @@ public class ChatUtils {
     public static final int STATE_LISTEN = 1;
     public static final int STATE_CONNECTING = 2;
     public static final int STATE_CONNECTED = 3;
+    private static final String TAG = "BluetoothConnection";
 
     private int state;
 
@@ -226,7 +229,7 @@ public class ChatUtils {
 
     private class ConnectedThread extends Thread {
         private final BluetoothSocket socket;
-        private final InputStream inputStream;
+        private final  InputStream inputStream;
         private final OutputStream outputStream;
 
         public ConnectedThread(BluetoothSocket socket) {
@@ -249,14 +252,15 @@ public class ChatUtils {
             byte[] buffer = new byte[1024];
             int bytes;
 
-            while (connectedThread != null)
+            while (true)
             {
                 try {
                     bytes=inputStream.read(buffer);
                     handler.obtainMessage(MainActivity.MESSAGE_READ,bytes,-1,buffer).sendToTarget();
                 } catch (IOException e) {
                     connectionLost();
-                    e.printStackTrace();
+                    Log.e(TAG, "write: Error reading to input stream. " + e.getMessage() );
+                    break;
                 }
             }
         }
@@ -266,7 +270,7 @@ public class ChatUtils {
                 outputStream.write(buffer);
                 handler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
-
+                Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
             }
         }
 
@@ -287,7 +291,7 @@ public class ChatUtils {
         handler.sendMessage(message);
 
 
-        ChatUtils.this.start();
+        this.start();
     }
 
     private synchronized void connectionFailed() {
@@ -297,7 +301,7 @@ public class ChatUtils {
         message.setData(bundle);
         handler.sendMessage(message);
 
-        ChatUtils.this.start();
+        this.start();
     }
 
     private synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
@@ -308,6 +312,7 @@ public class ChatUtils {
         Message message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.DEVICE_NAME, device.getName());
+        bundle.putString(MainActivity.DEVICE_ADDRESS, device.getAddress());
         message.setData(bundle);
         handler.sendMessage(message);
 

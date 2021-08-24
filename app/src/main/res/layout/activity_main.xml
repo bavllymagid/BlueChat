@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.java4.bluechat.UI.MainActivity">
+    tools:context="project.java4.bluechat.ui.MainActivity">
 
 
     <ListView
@@ -26,10 +26,19 @@
 
         <Button
             android:id="@+id/btn_send_msg"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="43dp"
+            android:layout_height="86dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="56dp"
             android:text="@string/str_label_btn_send" />
+
+        <Button
+            android:id="@+id/btn_send_image"
+            android:layout_width="44dp"
+            android:layout_height="87dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:text="@string/str_label_btn_send_image" />
     </RelativeLayout>
 
 </RelativeLayout>
