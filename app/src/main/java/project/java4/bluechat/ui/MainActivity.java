@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     Conversation conv = new Conversation();
                     conv.setId(bluetoothAdapter.getAddress());
                     AppDatabase.getDatabase(context).conversationOperations().insert(conv);
-                    project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, bluetoothAdapter.getAddress());
+                    project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, connectedDeviceAddress, true);
                     AppDatabase.getDatabase(context).messageOperations().insert(msg);
                     break;
                 case MESSAGE_READ:
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     Conversation conv1 = new Conversation();
                     conv1.setId(connectedDeviceAddress);
                     AppDatabase.getDatabase(context).conversationOperations().insert(conv1);
-                    project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress);
+                    project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress, false);
                     AppDatabase.getDatabase(context).messageOperations().insert(msg1);
                     break;
                 case MESSAGE_DEVICE_NAME:

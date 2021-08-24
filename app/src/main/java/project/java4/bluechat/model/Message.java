@@ -28,20 +28,32 @@ public class Message {
     private String convId;
 
     @ColumnInfo
+    boolean isMyMessage;
+
+    @ColumnInfo
     private String content;
 
     @ColumnInfo(name = "time_sent")
     private Date timeSent;
 
     @Ignore
-    public Message(String content, String convId) {
+    public Message(String content, String convId, boolean isMyMessage) {
         this.content = content;
         this.convId = convId;
+        this.isMyMessage = isMyMessage;
         this.timeSent = Calendar.getInstance().getTime();
     }
 
     public Message() {
         this.timeSent = Calendar.getInstance().getTime();
+    }
+
+    public boolean isMyMessage() {
+        return isMyMessage;
+    }
+
+    public void setMyMessage(boolean myMessage) {
+        isMyMessage = myMessage;
     }
 
     public String getConvId() {
