@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="test"
-        android:title="test"
-        android:summaryOn="test"
-        android:summaryOff="test"/>
+    <ListPreference
+        android:defaultValue="@string/pref_font_size_medium_value"
+        android:entries="@array/pref_theme_color_option_labels"
+        android:entryValues="@array/pref_theme_color_option_values"
+        android:key="@string/pref_theme_color_key"
+        android:title="@string/pref_theme_color_label"
+        />
     <ListPreference
         android:defaultValue="@string/pref_font_size_medium_value"
         android:entries="@array/pref_font_size_option_labels"
         android:entryValues="@array/pref_font_size_option_values"
         android:key="@string/pref_font_size_key"
-        android:title="@string/pref_font_size_label"/>
+        android:title="@string/pref_font_size_label"
+        />
 </PreferenceScreen>

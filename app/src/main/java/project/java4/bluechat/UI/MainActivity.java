@@ -6,13 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         initBluetooth();
+//        getTheme();
     }
 
     private void init() {
@@ -339,4 +343,30 @@ public class MainActivity extends AppCompatActivity {
             chatUtils.stop();
         }
     }
+
+    private int getCurrTheme(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String themeString = sharedPreferences.getString(getString(R.string.pref_theme_color_key), getString(R.string.pref_theme_color_purple_value));
+        if(themeString.equals(getString(R.string.pref_theme_color_purple_value))){
+            return R.style.AppTheme;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_dark_blue_value))){
+            return R.style.AppThemeDarkBlue;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_vibrant_blue_value))){
+            return R.style.AppThemeVibrantBlue;
+        }
+        else if (themeString.equals(getString(R.string.pref_theme_color_grey_value))){
+            return R.style.AppThemeGrey;
+        }
+        return R.style.AppTheme;
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme =  super.getTheme();
+        theme.applyStyle(getCurrTheme(), true);
+        return theme;
+    }
+
 }

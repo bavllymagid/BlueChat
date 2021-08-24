@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="project.java4.bluechat" >
+    package="project.java4.bluechat">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
@@ -16,8 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.DeviceListActivity"></activity>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".UI.DeviceListActivity"></activity>
+        <activity android:name=".UI.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".preferences.SettingsActivity"
             android:label="@string/pref_menu_label"
@@ -26,14 +32,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".UI.MainActivity"/>
 
-        </activity>
-        <activity android:name=".UI.DeviceListActivity" />
-        <activity android:name=".UI.MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

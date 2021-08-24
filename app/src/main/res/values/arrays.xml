@@ -11,4 +11,18 @@
         <item>@string/pref_font_size_medium_value</item>
         <item>@string/pref_font_size_large_value</item>
     </array>
+
+    <array name="pref_theme_color_option_values">
+        <item>@string/pref_theme_color_dark_blue_value</item>
+        <item>@string/pref_theme_color_vibrant_blue_value</item>
+        <item>@string/pref_theme_color_grey_value</item>
+        <item>@string/pref_theme_color_purple_value</item>
+    </array>
+
+    <array name="pref_theme_color_option_labels">
+        <item>@string/pref_theme_color_label_dark_blue</item>
+        <item>@string/pref_theme_color_label_vibrant_blue</item>
+        <item>@string/pref_theme_color_label_grey</item>
+        <item>@string/pref_theme_color_label_purple</item>
+    </array>
 </resources>
