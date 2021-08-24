@@ -32,7 +32,7 @@
                 android:fontFamily="sans-serif-light"
                 android:textSize="10sp"
                 android:textColor="@color/white"
-                tools:text="12:07" />
+                tools:text="Omar" />
 
             <TextView
                 android:id="@+id/tv_text"
@@ -40,6 +40,15 @@
                 android:textColor="@color/white"
                 android:layout_height="match_parent"
                 android:textIsSelectable="true"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:layout_height="match_parent"
+                android:textIsSelectable="true"
+                android:text="12:07"
                 tools:text="@tools:sample/lorem" />
 
         </LinearLayout>
