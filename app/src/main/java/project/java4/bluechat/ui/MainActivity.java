@@ -28,6 +28,7 @@ import java.util.List;
 
 import project.java4.bluechat.adapters.messageAdapter;
 import project.java4.bluechat.database.AppDatabase;
+import project.java4.bluechat.model.Conversation;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -84,12 +85,18 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
+                    Conversation conv = new Conversation();
+                    conv.setId(bluetoothAdapter.getAddress());
+                    AppDatabase.getDatabase(context).conversationOperations().insert(conv);
                     project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, bluetoothAdapter.getAddress());
                     AppDatabase.getDatabase(context).messageOperations().insert(msg);
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
+                    Conversation conv1 = new Conversation();
+                    conv1.setId(connectedDeviceAddress);
+                    AppDatabase.getDatabase(context).conversationOperations().insert(conv1);
                     project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress);
                     AppDatabase.getDatabase(context).messageOperations().insert(msg1);
                     break;
