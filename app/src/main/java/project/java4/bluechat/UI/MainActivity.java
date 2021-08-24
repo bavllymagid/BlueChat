@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private String connectedDeviceName;
     private String connectedDeviceAddress;
 
+    SharedPreferences sharedPreferences;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         initBluetooth();
-//        getTheme();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     private void init() {
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btn_send_msg);
         btnSendImage = findViewById(R.id.btn_send_image);
 
-        adapterMainChat = new messageAdapter(context);
+        adapterMainChat = new messageAdapter(context, getFontSizeFromPref(sharedPreferences));
 
         AppDatabase.getDatabase(context).messageOperations().getAll().observe(this, new Observer<List<project.java4.bluechat.model.Message>>() {
             @Override
@@ -344,8 +346,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getCurrTheme(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    private int getCurrTheme(SharedPreferences sharedPreferences){
         String themeString = sharedPreferences.getString(getString(R.string.pref_theme_color_key), getString(R.string.pref_theme_color_purple_value));
         if(themeString.equals(getString(R.string.pref_theme_color_purple_value))){
             return R.style.AppTheme;
@@ -362,11 +363,25 @@ public class MainActivity extends AppCompatActivity {
         return R.style.AppTheme;
     }
 
-    @Override
-    public Resources.Theme getTheme() {
-        Resources.Theme theme =  super.getTheme();
-        theme.applyStyle(getCurrTheme(), true);
-        return theme;
+//    @Override
+//    public Resources.Theme getTheme() {
+//        Resources.Theme theme =  super.getTheme();
+//        theme.applyStyle(getCurrTheme(), true);
+//        return theme;
+//    }
+
+        private float getFontSizeFromPref(SharedPreferences sharedPreferences){
+        String fontSize = sharedPreferences.getString(getString(R.string.pref_font_size_key), "medium");
+        switch (fontSize){
+            case "small":
+                return 9;
+            case "medium":
+                return 13;
+            case "large":
+                return 15;
+            default:
+                return 12;
+        }
     }
 
 }
