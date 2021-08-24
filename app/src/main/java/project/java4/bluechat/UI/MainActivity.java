@@ -31,10 +31,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -90,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    adapterMainChat.add(new project.java4.bluechat.UI.Message(outputBuffer, "Me", true, null));
+                    adapterMainChat.add(new project.java4.bluechat.ui.Message(outputBuffer, "Me", true));
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
 
 
-                    adapterMainChat.add(new project.java4.bluechat.UI.Message(inputBuffer, connectedDevice, false, null));
+                    adapterMainChat.add(new project.java4.bluechat.ui.Message(inputBuffer, connectedDevice, false));
 
                     break;
                 case MESSAGE_DEVICE_NAME:
@@ -125,26 +121,10 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         initBluetooth();
-        chatUtils = new ChatUtils(handler);
-
-        if(!bluetoothAdapter.isEnabled() && bluetoothAdapter != null) {
-            enableBluetooth();
-            try {
-                Thread.sleep(1000);
-
-                chatUtils.start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }else if(bluetoothAdapter != null) {
-            chatUtils.start();
-        }
-        else {
-            Toast.makeText(context, "There's no bluetooth on this device", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void init() {
+        chatUtils = new ChatUtils(handler);
         listMainChat = findViewById(R.id.list_conversation);
         edCreateMessage = findViewById(R.id.ed_enter_message);
         btnSendMessage = findViewById(R.id.btn_send_msg);
@@ -178,7 +158,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
+        if (bluetoothAdapter != null) {
+            if(!bluetoothAdapter.isEnabled()) {
+                enableBluetooth();
+                try {
+                    Thread.sleep(1000);
+
+                    chatUtils.start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                chatUtils.start();
+            }
+        }else {
             Toast.makeText(context, "No bluetooth found", Toast.LENGTH_SHORT).show();
         }
     }

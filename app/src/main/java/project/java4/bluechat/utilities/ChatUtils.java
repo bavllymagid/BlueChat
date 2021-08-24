@@ -18,7 +18,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 
-import project.java4.bluechat.UI.MainActivity;
+import project.java4.bluechat.ui.MainActivity;
 
 public class ChatUtils {
     private final Handler handler;

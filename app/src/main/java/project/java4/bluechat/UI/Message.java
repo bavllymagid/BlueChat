@@ -1,4 +1,4 @@
-package project.java4.bluechat.UI;
+package project.java4.bluechat.ui;
 
 import android.media.Image;
 import android.widget.ImageView;

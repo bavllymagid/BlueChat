@@ -1,4 +1,4 @@
-package project.java4.bluechat.UI;
+package project.java4.bluechat.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import project.java4.bluechat.ui.Message;
 
 import project.java4.bluechat.R;
 
