@@ -1,4 +1,4 @@
-package project.java4.bluechat.UI;
+package project.java4.bluechat.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
