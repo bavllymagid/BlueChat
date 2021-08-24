@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -23,7 +24,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import project.java4.bluechat.adapters.messageAdapter;
+import project.java4.bluechat.database.AppDatabase;
 import project.java4.bluechat.utilities.ChatUtils;
 import project.java4.bluechat.R;
 
@@ -80,15 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    adapterMainChat.add(new project.java4.bluechat.ui.Message(outputBuffer, "Me", true));
+                    project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, bluetoothAdapter.getAddress());
+                    AppDatabase.getDatabase(context).messageOperations().insert(msg);
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-
-
-                    adapterMainChat.add(new project.java4.bluechat.ui.Message(inputBuffer, connectedDeviceName, false));
-
+                    project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress);
+                    AppDatabase.getDatabase(context).messageOperations().insert(msg1);
                     break;
                 case MESSAGE_DEVICE_NAME:
                     connectedDeviceName = message.getData().getString(DEVICE_NAME);
@@ -126,7 +129,16 @@ public class MainActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btn_send_msg);
         btnSendImage = findViewById(R.id.btn_send_image);
 
-        adapterMainChat = new messageAdapter(context);
+        adapterMainChat = new messageAdapter(context, bluetoothAdapter);
+
+        AppDatabase.getDatabase(context).messageOperations().getAll().observe(this, new Observer<List<project.java4.bluechat.model.Message>>() {
+            @Override
+            public void onChanged(List<project.java4.bluechat.model.Message> messages) {
+                adapterMainChat.setMessages(messages);
+                adapterMainChat.notifyDataSetChanged();
+            }
+        });
+
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {

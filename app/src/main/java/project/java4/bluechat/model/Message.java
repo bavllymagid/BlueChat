@@ -3,32 +3,54 @@ package project.java4.bluechat.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Calendar;
 import java.util.Date;
 
-@Entity(foreignKeys = {@ForeignKey(entity = User.class,
-        parentColumns = "user_id",
-        childColumns = "user_id",
-        onDelete = ForeignKey.CASCADE),
-@ForeignKey(entity = Conversation.class,
-        parentColumns = "conv_id",
+@Entity(foreignKeys = {
+        @ForeignKey(entity = Conversation.class,
+        parentColumns = "id",
         childColumns = "conv_id",
-        onDelete = ForeignKey.CASCADE)},
-indices = {@Index("user_id"), @Index("conv_id")})
+        onDelete = ForeignKey.CASCADE)
+},
+indices = { @Index("conv_id") })
 public class Message {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
-    @ColumnInfo(name = "user_id")
-    private long userId;
+
     @ColumnInfo(name = "conv_id")
-    private long convId;
+    private String convId;
+
     @ColumnInfo
     private String content;
+
     @ColumnInfo(name = "time_sent")
     private Date timeSent;
+
+    @Ignore
+    public Message(String content, String convId) {
+        this.content = content;
+        this.convId = convId;
+        this.timeSent = Calendar.getInstance().getTime();
+    }
+
+    public Message() {
+        this.timeSent = Calendar.getInstance().getTime();
+    }
+
+    public String getConvId() {
+        return convId;
+    }
+
+    public void setConvId(String convId) {
+        this.convId = convId;
+    }
 
     public long getId() {
         return id;
@@ -36,22 +58,6 @@ public class Message {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getConvId() {
-        return convId;
-    }
-
-    public void setConvId(long convId) {
-        this.convId = convId;
     }
 
     public String getContent() {
