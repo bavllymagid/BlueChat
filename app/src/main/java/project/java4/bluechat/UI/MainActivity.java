@@ -46,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private ListView listMainChat;
     private EditText edCreateMessage;
     private Button btnSendMessage;
+
     private Button btnSendImage;
-    private ArrayAdapter<String> adapterMainChat;
+
+    private messageAdapter adapterMainChat;
+
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
     private final int STORAGE_PERMISSION_REQUEST = 103;
@@ -87,12 +90,15 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
-                    adapterMainChat.add("Me: " + outputBuffer);
+                    adapterMainChat.add(new project.java4.bluechat.UI.Message(outputBuffer, "Me", true, null));
                     break;
                 case MESSAGE_READ:
                     byte[] buffer = (byte[]) message.obj;
                     String inputBuffer = new String(buffer, 0, message.arg1);
-                    adapterMainChat.add(connectedDevice + ": "+inputBuffer);
+
+
+                    adapterMainChat.add(new project.java4.bluechat.UI.Message(inputBuffer, connectedDevice, false, null));
+
                     break;
                 case MESSAGE_DEVICE_NAME:
                     connectedDevice = message.getData().getString(DEVICE_NAME);
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btn_send_msg);
         btnSendImage = findViewById(R.id.btn_send_image);
 
-        adapterMainChat = new ArrayAdapter<String>(context, R.layout.message_layout);
+        adapterMainChat = new messageAdapter(context);
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
