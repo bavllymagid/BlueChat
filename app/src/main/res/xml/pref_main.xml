@@ -6,6 +6,7 @@
         android:entryValues="@array/pref_theme_color_option_values"
         android:key="@string/pref_theme_color_key"
         android:title="@string/pref_theme_color_label"
+        android:icon="@drawable/ic_baseline_palette_24"
         />
     <ListPreference
         android:defaultValue="@string/pref_font_size_medium_value"
@@ -13,5 +14,6 @@
         android:entryValues="@array/pref_font_size_option_values"
         android:key="@string/pref_font_size_key"
         android:title="@string/pref_font_size_label"
+        android:icon="@drawable/ic_baseline_font_download_24"
         />
 </PreferenceScreen>
