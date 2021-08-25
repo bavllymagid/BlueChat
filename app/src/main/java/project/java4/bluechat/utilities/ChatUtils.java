@@ -292,14 +292,14 @@ public class ChatUtils {
         }
     }
 
-    private void connectionLost() {
+    public void connectionLost() {
         Message message = mHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Connection Lost");
         message.setData(bundle);
         mHandler.sendMessage(message);
 
-
+        setState(STATE_LISTEN);
         this.start();
     }
 

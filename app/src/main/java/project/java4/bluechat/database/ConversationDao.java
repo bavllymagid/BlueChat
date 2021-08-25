@@ -23,6 +23,9 @@ public interface ConversationDao {
     @Query("SELECT * FROM Conversation WHERE id=:id")
     Conversation get(String id);
 
+    @Query("SELECT * FROM Conversation WHERE id=:id")
+    boolean found(String id);
+
     @Delete
     void delete(Conversation conversation);
 }

@@ -43,22 +43,21 @@ import project.java4.bluechat.R;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
-    private BluetoothAdapter bluetoothAdapter;
+    public static BluetoothAdapter bluetoothAdapter;
     private ChatUtils chatUtils;
 
     private ListView listConversations;
     private HomeAdapter conversationAdapter;
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
-    private final int STORAGE_PERMISSION_REQUEST = 103;
     private final int SELECT_DEVICE = 102;
-    private static final int RESULT_LOAD_IMG = 200;
 
     public static final int MESSAGE_STATE_CHANGED = 0;
     public static final int MESSAGE_READ = 1;
     public static final int MESSAGE_WRITE = 2;
     public static final int MESSAGE_DEVICE_NAME = 3;
     public static final int MESSAGE_TOAST = 4;
+    private long pressedTime;
 
     public static final String DEVICE_NAME = "deviceName";
     public static final String DEVICE_ADDRESS = "deviceAddress";
@@ -93,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
                     connectedDeviceAddress = message.getData().getString(DEVICE_ADDRESS);
                     Toast.makeText(context, connectedDeviceName, Toast.LENGTH_SHORT).show();
                     Toast.makeText(context, connectedDeviceAddress, Toast.LENGTH_SHORT).show();
-                    Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
-                    AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+                    if(!AppDatabase.getDatabase(context).conversationOperations().found(connectedDeviceAddress)) {
+                        Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
+                        AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+                    }
                     Intent intent = new Intent(MainActivity.this,ChatActivity.class);
                     intent.putExtra("deviceAddress", connectedDeviceAddress);
                     intent.putExtra("deviceName", connectedDeviceName);
@@ -120,9 +121,12 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         init();
+        chatUtils.stop();
         initBluetooth();
         checkDarkMode();
+        setState("Not Connected");
     }
+
 
     private void init() {
         chatUtils = ChatUtils.getInstance(handler);
@@ -293,5 +297,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (pressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            finish();
+            System.exit(0);
+        } else {
+            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+        }
+        pressedTime = System.currentTimeMillis();
+    }
 
 }
