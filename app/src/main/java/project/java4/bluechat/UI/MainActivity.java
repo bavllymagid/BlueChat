@@ -3,6 +3,7 @@ package project.java4.bluechat.UI;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         initBluetooth();
+        checkDarkMode();
     }
 
     private void init() {
@@ -280,29 +282,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int getCurrTheme(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String themeString = sharedPreferences.getString(getString(R.string.pref_theme_color_key), getString(R.string.pref_theme_color_purple_value));
-        if(themeString.equals(getString(R.string.pref_theme_color_purple_value))){
-            return R.style.AppTheme;
+    private void checkDarkMode(){
+        Boolean isDarkModeOn = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("darkMode", false);
+        if(isDarkModeOn){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
-        else if (themeString.equals(getString(R.string.pref_theme_color_dark_blue_value))){
-            return R.style.AppThemeDarkBlue;
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        else if (themeString.equals(getString(R.string.pref_theme_color_vibrant_blue_value))){
-            return R.style.AppThemeVibrantBlue;
-        }
-        else if (themeString.equals(getString(R.string.pref_theme_color_grey_value))){
-            return R.style.AppThemeGrey;
-        }
-        return R.style.AppTheme;
+
     }
 
-    @Override
-    public Resources.Theme getTheme() {
-        Resources.Theme theme =  super.getTheme();
-        theme.applyStyle(getCurrTheme(), true);
-        return theme;
-    }
 
 }

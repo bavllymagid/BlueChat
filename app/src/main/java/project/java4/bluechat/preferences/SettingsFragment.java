@@ -8,6 +8,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
 
 import project.java4.bluechat.R;
 
@@ -22,7 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         for (int i = 0; i < count; i++) {
             Preference p = preferenceScreen.getPreference(i);
-            if (!(p instanceof CheckBoxPreference)){
+            if (!(p instanceof SwitchPreference)){
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
             }
@@ -43,7 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
         if(preference != null){
-            if(!(preference instanceof CheckBoxPreference)){
+            if(!(preference instanceof SwitchPreference)){
                 String value = sharedPreferences.getString(preference.getKey(), "");
                 setPreferenceSummary(preference, value);
             }
