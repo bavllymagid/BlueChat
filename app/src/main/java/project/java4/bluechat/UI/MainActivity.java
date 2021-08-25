@@ -121,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         init();
-        chatUtils.stop();
+        if(bluetoothAdapter!=null) {
+            chatUtils.stop();
+        }
         initBluetooth();
         checkDarkMode();
         setState("Not Connected");

@@ -174,6 +174,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(chatUtils.getState() == ChatUtils.STATE_CONNECTED) {
             AlertDialog.Builder back = new AlertDialog.Builder(this);
             back.setMessage("Do you want to disconnect");
             back.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -181,6 +182,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     chatUtils.connectionLost();
                     Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
             });
@@ -191,6 +193,11 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
             back.show();
+        }else {
+            Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
 
     }
 }
