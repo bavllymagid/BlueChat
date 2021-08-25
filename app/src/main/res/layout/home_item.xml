@@ -30,26 +30,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
+
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Main Title"
-                android:textColor="#000"
-                android:textStyle="bold"
-                android:layout_margin="5dp"
-                android:textSize="20sp"
                 android:id="@+id/textView1"
-                />
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sub Title"
-                android:textColor="#a9a9a9"
-                android:textStyle="bold"
                 android:layout_margin="5dp"
-                android:textSize="15sp"
+                android:text="Main Title"
+                android:textColor="@color/mainText"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/textView2"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Sub Title"
+                android:textColor="@color/altText"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
 </LinearLayout>

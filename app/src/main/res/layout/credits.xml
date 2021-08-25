@@ -4,33 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/mainBG">
 
     <Button
         android:id="@+id/button"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:background="@drawable/credits_button"
-        android:textSize="14sp"
+        android:gravity="center_horizontal"
         android:padding="44dp"
         android:text="Show
         Credits"
-        android:layout_width = "150dp"
-        android:layout_height = "150dp"
-        android:textColor="@color/white"></Button>
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="14sp"></Button>
 
 
     <TextView
+        android:id="@+id/List_of_credits"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:textStyle="bold"
         android:layout_marginLeft="150dp"
-        android:textSize="20dp"
         android:textColor="#0000FF"
+        android:textSize="20dp"
+        android:textStyle="bold"
 
-        android:id="@+id/List_of_credits"/>
+        android:visibility="gone" />
 
 
 </RelativeLayout>

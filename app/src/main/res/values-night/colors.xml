@@ -10,10 +10,10 @@
 
 
 
-    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimary">#0623B5</color>
     <color name="colorPrimaryDark">#051E9A</color>
     <color name="colorAccent">#ED8F04</color>
     <color name="altText">#C1C1C1</color>
-    <color name="mainText">#121212</color>
-    <color name="mainBG">#FFFFFF</color>
+    <color name="mainText">#FFFFFF</color>
+    <color name="mainBG">#121212</color>
 </resources>

@@ -3,4 +3,5 @@
     android:id="@+id/device_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="#000000"/>
+    android:background="@color/mainBG"
+    android:textColor="@color/mainText" />

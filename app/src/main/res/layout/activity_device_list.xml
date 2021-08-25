@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainBG"
     android:orientation="vertical"
     tools:context="project.java4.bluechat.UI.DeviceListActivity">
 
@@ -16,7 +17,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_paired_devices" />
+        android:text="@string/str_paired_devices"
+        android:textColor="@color/mainText" />
 
     <ListView
         android:id="@+id/list_paired_devices"
@@ -26,7 +28,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_available_devices" />
+        android:text="@string/str_available_devices"
+        android:textColor="@color/mainText" />
 
     <ListView
         android:id="@+id/list_available_devices"
