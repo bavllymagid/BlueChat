@@ -32,7 +32,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
                             android:textSize="10sp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/theirMessage_textColor"
                             tools:text="12:07" />
 
                         <TextView

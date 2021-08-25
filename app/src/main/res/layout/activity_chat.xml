@@ -15,6 +15,7 @@
         <RelativeLayout
             android:id="@+id/connect_layout"
             android:layout_width="match_parent"
+            android:background="@color/mainBG"
             android:layout_height="200dp"
             android:layout_gravity="top"
             android:layout_weight="1"
@@ -28,7 +29,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
                 android:text="You are not connected to this device right now"
-                android:textColor="@color/black"
+                android:textColor="@color/textHint_color"
                 android:textSize="18sp" />
 
             <Button
@@ -37,9 +38,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txt_of_connection"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginRight="14dp"
-                android:background="#0000FF"
+                android:background="@color/colorPrimary"
                 android:text="CONNECT"
                 android:textColor="@color/white" />
         </RelativeLayout>
