@@ -7,13 +7,6 @@
         android:summaryOff="Dark mode disabled"
         android:summaryOn="Dark mode enabled"
         android:title="Dark Mode" />
-<!--    <ListPreference-->
-<!--        android:defaultValue="@string/pref_font_size_medium_value"-->
-<!--        android:entries="@array/pref_theme_color_option_labels"-->
-<!--        android:entryValues="@array/pref_theme_color_option_values"-->
-<!--        android:icon="@drawable/ic_baseline_palette_24"-->
-<!--        android:key="@string/pref_theme_color_key"-->
-<!--        android:title="@string/pref_theme_color_label" />-->
     <ListPreference
         android:defaultValue="@string/pref_font_size_medium_value"
         android:entries="@array/pref_font_size_option_labels"

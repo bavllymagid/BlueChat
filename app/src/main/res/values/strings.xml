@@ -26,17 +26,5 @@
     <string name="pref_font_size_small_value" translatable="false">small</string>
     <string name="pref_font_size_medium_value" translatable="false">medium</string>
     <string name="pref_font_size_large_value" translatable="false">large</string>
-<!--    &lt;!&ndash;theme color list preference&ndash;&gt;-->
-<!--    <string name="pref_theme_color_label">Theme color</string>-->
-<!--    <string name="pref_theme_color_key" translatable="false">themeColor</string>-->
-<!--    &lt;!&ndash;    theme labels&ndash;&gt;-->
-<!--    <string name="pref_theme_color_label_vibrant_blue">Vibrant blue</string>-->
-<!--    <string name="pref_theme_color_label_dark_blue">Dark blue</string>-->
-<!--    <string name="pref_theme_color_label_grey">Grey</string>-->
-<!--    <string name="pref_theme_color_label_purple">Purple</string>-->
-<!--    &lt;!&ndash;    theme values&ndash;&gt;-->
-<!--    <string name="pref_theme_color_vibrant_blue_value">vibrantBlue</string>-->
-<!--    <string name="pref_theme_color_dark_blue_value">darkBlue</string>-->
-<!--    <string name="pref_theme_color_grey_value">grey</string>-->
-<!--    <string name="pref_theme_color_purple_value">purple</string>-->
+
 </resources>
