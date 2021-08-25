@@ -62,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
                         case ChatUtils.STATE_LISTEN:
                             setState("Not Connected");
                             Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             break;
                         case ChatUtils.STATE_CONNECTING:
