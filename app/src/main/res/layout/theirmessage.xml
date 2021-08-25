@@ -14,7 +14,7 @@
             android:layout_marginStart="48dp"
             android:layout_marginTop="6dp"
             android:minWidth="128dp"
-            card_view:cardCornerRadius="2dp"
+            card_view:cardCornerRadius="15dp"
             card_view:cardElevation="1dp"
             card_view:cardPreventCornerOverlap="false">
 
@@ -40,7 +40,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="end"
-                            android:textColor="@color/white"
+                            android:textColor="@color/theirMessage_textColor"
                             android:textIsSelectable="true"
                             tools:text="@tools:sample/lorem" />
 

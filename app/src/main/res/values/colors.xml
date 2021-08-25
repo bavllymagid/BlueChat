@@ -11,6 +11,8 @@
 
 
     <color name="colorPrimary">#03A9F4</color>
+    <color name="theirMessage_textColor">#000000</color>
+    <color name="textHint_color">#000000</color>
     <color name="colorPrimaryDark">#051E9A</color>
     <color name="colorAccent">#ED8F04</color>
     <color name="altText">#C1C1C1</color>
