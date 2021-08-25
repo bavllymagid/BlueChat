@@ -6,8 +6,6 @@
         android:toYDelta="-100%p"
         android:duration="30000"
         >
-
-
     </translate>
 
 </set>

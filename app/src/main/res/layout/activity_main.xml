@@ -1,44 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.java4.bluechat.UI.MainActivity">
-
+    android:orientation="vertical"
+    tools:context=".UI.MainActivity"
+    >
 
     <ListView
-        android:id="@+id/list_conversation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
-        android:background="#efefef" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <EditText
-            android:id="@+id/ed_enter_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp" />
-
-        <Button
-            android:id="@+id/btn_send_msg"
-            android:layout_width="43dp"
-            android:layout_height="86dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="56dp"
-            android:text="@string/str_label_btn_send" />
-
-        <Button
-            android:id="@+id/btn_send_image"
-            android:layout_width="44dp"
-            android:layout_height="87dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp"
-            android:text="@string/str_label_btn_send_image" />
-    </RelativeLayout>
-
-</RelativeLayout>
+        android:id="@+id/ListView"
+        >
+    </ListView>
+</LinearLayout>

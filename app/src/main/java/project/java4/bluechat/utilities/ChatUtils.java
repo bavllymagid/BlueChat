@@ -18,7 +18,7 @@ import java.util.UUID;
 import project.java4.bluechat.UI.MainActivity;
 
 public class ChatUtils {
-    private final Handler handler;
+    private static Handler mHandler;
     private BluetoothAdapter bluetoothAdapter;
     private ConnectThread connectThread;
     private AcceptThread acceptThread;
@@ -33,11 +33,11 @@ public class ChatUtils {
     public static final int STATE_CONNECTED = 3;
     private static final String TAG = "BluetoothConnection";
 
+    public static volatile ChatUtils instance = null;
+
     private int state;
 
-    public ChatUtils(Handler handler) {
-        this.handler = handler;
-
+    public ChatUtils() {
         state = STATE_NONE;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
@@ -46,9 +46,21 @@ public class ChatUtils {
         return state;
     }
 
+    public static ChatUtils getInstance(Handler handler) {
+        mHandler = handler;
+        if (instance == null) {
+            synchronized (ChatUtils.class) {
+                if (instance == null) {
+                    instance = new ChatUtils();
+                }
+            }
+        }
+        return instance;
+    }
+
     public synchronized void setState(int state) {
         this.state = state;
-        handler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGED, state, -1).sendToTarget();
+        mHandler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGED, state, -1).sendToTarget();
     }
 
     public synchronized void start() {
@@ -253,7 +265,7 @@ public class ChatUtils {
             {
                 try {
                     bytes=inputStream.read(buffer);
-                    handler.obtainMessage(MainActivity.MESSAGE_READ,bytes,-1,buffer).sendToTarget();
+                    mHandler.obtainMessage(MainActivity.MESSAGE_READ,bytes,-1,buffer).sendToTarget();
                 } catch (IOException e) {
                     connectionLost();
                     Log.e(TAG, "write: Error reading to input stream. " + e.getMessage() );
@@ -265,7 +277,7 @@ public class ChatUtils {
         public void write(byte[] buffer) {
             try {
                 outputStream.write(buffer);
-                handler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
             }
@@ -281,22 +293,22 @@ public class ChatUtils {
     }
 
     private void connectionLost() {
-        Message message = handler.obtainMessage(MainActivity.MESSAGE_TOAST);
+        Message message = mHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Connection Lost");
         message.setData(bundle);
-        handler.sendMessage(message);
+        mHandler.sendMessage(message);
 
 
         this.start();
     }
 
     private synchronized void connectionFailed() {
-        Message message = handler.obtainMessage(MainActivity.MESSAGE_TOAST);
+        Message message = mHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Cant connect to the device");
         message.setData(bundle);
-        handler.sendMessage(message);
+        mHandler.sendMessage(message);
 
         this.start();
     }
@@ -306,12 +318,12 @@ public class ChatUtils {
         connectedThread = new ConnectedThread(socket);
         connectedThread.start();
 
-        Message message = handler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
+        Message message = mHandler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.DEVICE_NAME, device.getName());
         bundle.putString(MainActivity.DEVICE_ADDRESS, device.getAddress());
         message.setData(bundle);
-        handler.sendMessage(message);
+        mHandler.sendMessage(message);
 
         setState(STATE_CONNECTED);
     }

@@ -22,11 +22,15 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import project.java4.bluechat.adapters.HomeAdapter;
 import project.java4.bluechat.preferences.SettingsActivity;
 import java.util.List;
 
@@ -41,13 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private ChatUtils chatUtils;
 
-    private ListView listMainChat;
-    private EditText edCreateMessage;
-    private Button btnSendMessage;
-
-    private Button btnSendImage;
-
-    private messageAdapter adapterMainChat;
+    private ListView listConversations;
+    private HomeAdapter conversationAdapter;
 
     private final int LOCATION_PERMISSION_REQUEST = 101;
     private final int STORAGE_PERMISSION_REQUEST = 103;
@@ -65,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String TOAST = "toast";
     private String connectedDeviceName;
     private String connectedDeviceAddress;
+
+
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -86,27 +87,17 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                     break;
-                case MESSAGE_WRITE:
-                    byte[] buffer1 = (byte[]) message.obj;
-                    String outputBuffer = new String(buffer1);
-                    Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
-                    AppDatabase.getDatabase(context).conversationOperations().insert(conv);
-                    project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message(outputBuffer, connectedDeviceAddress, true);
-                    AppDatabase.getDatabase(context).messageOperations().insert(msg);
-                    break;
-                case MESSAGE_READ:
-                    byte[] buffer = (byte[]) message.obj;
-                    String inputBuffer = new String(buffer, 0, message.arg1);
-                    Conversation conv1 = new Conversation(connectedDeviceAddress, connectedDeviceName);
-                    AppDatabase.getDatabase(context).conversationOperations().insert(conv1);
-                    project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message(inputBuffer, connectedDeviceAddress, false);
-                    AppDatabase.getDatabase(context).messageOperations().insert(msg1);
-                    break;
                 case MESSAGE_DEVICE_NAME:
                     connectedDeviceName = message.getData().getString(DEVICE_NAME);
                     connectedDeviceAddress = message.getData().getString(DEVICE_ADDRESS);
                     Toast.makeText(context, connectedDeviceName, Toast.LENGTH_SHORT).show();
                     Toast.makeText(context, connectedDeviceAddress, Toast.LENGTH_SHORT).show();
+                    Conversation conv = new Conversation(connectedDeviceAddress, connectedDeviceName);
+                    AppDatabase.getDatabase(context).conversationOperations().insert(conv);
+                    Intent intent = new Intent(MainActivity.this,ChatActivity.class);
+                    intent.putExtra("deviceAddress", connectedDeviceAddress);
+                    intent.putExtra("deviceName", connectedDeviceName);
+                    startActivity(intent);
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(context, message.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
@@ -127,63 +118,43 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
-
-
         init();
         initBluetooth();
-
-        Conversation conv = new Conversation("DUMMY", "shshs");
-        AppDatabase.getDatabase(context).conversationOperations().insert(conv);
-        project.java4.bluechat.model.Message msg = new project.java4.bluechat.model.Message("dummy", "DUMMY", true);
-        AppDatabase.getDatabase(context).messageOperations().insert(msg);
-        project.java4.bluechat.model.Message msg1 = new project.java4.bluechat.model.Message("dummy1", "DUMMY", false);
-        AppDatabase.getDatabase(context).messageOperations().insert(msg);
-        project.java4.bluechat.model.Message msg2 = new project.java4.bluechat.model.Message("dummy2", "DUMMY", true);
-        AppDatabase.getDatabase(context).messageOperations().insert(msg);
-        project.java4.bluechat.model.Message msg3 = new project.java4.bluechat.model.Message("dummy3", "DUMMY", false);
-        AppDatabase.getDatabase(context).messageOperations().insert(msg);
     }
 
     private void init() {
-        chatUtils = new ChatUtils(handler);
-        listMainChat = findViewById(R.id.list_conversation);
-        edCreateMessage = findViewById(R.id.ed_enter_message);
-        btnSendMessage = findViewById(R.id.btn_send_msg);
-        btnSendImage = findViewById(R.id.btn_send_image);
+        chatUtils = ChatUtils.getInstance(handler);
+        listConversations = findViewById(R.id.ListView);
 
-        adapterMainChat = new messageAdapter(context);
+        conversationAdapter = new HomeAdapter(context);
 
-        AppDatabase.getDatabase(context).messageOperations().getAll().observe(this, new Observer<List<project.java4.bluechat.model.Message>>() {
+        AppDatabase.getDatabase(context).conversationOperations().getAll().observe(this, new Observer<List<Conversation>>() {
             @Override
-            public void onChanged(List<project.java4.bluechat.model.Message> messages) {
-                adapterMainChat.setMessages(messages);
-                adapterMainChat.notifyDataSetChanged();
+            public void onChanged(List<Conversation> conversations) {
+                conversationAdapter.setConversations(conversations);
+                conversationAdapter.notifyDataSetChanged();
             }
         });
 
-        listMainChat.setAdapter(adapterMainChat);
+        listConversations.setAdapter(conversationAdapter);
 
-        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+        listConversations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                String message = edCreateMessage.getText().toString();
-                if(chatUtils.getState() != ChatUtils.STATE_LISTEN) {
-                    if (!message.isEmpty()) {
-                        edCreateMessage.setText("");
-                        chatUtils.write(message.getBytes());
-                    }
-                }else {
-                    Toast.makeText(getApplicationContext(), "You're not connected please make a connection", Toast.LENGTH_SHORT).show();
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView tv = (TextView) view.findViewById(R.id.textView2);
+                TextView tv2 = (TextView) view.findViewById(R.id.textView1);
+                String tempAddress = tv.getText().toString();
+                String tempName = tv2.getText().toString();
+
+                Intent intent = new Intent(MainActivity.this,ChatActivity.class);
+                intent.putExtra("deviceAddress", tempAddress);
+                intent.putExtra("deviceName", tempName);
+                startActivity(intent);
             }
         });
 
-        btnSendImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPhotoPermission();
-            }
-        });
+
+
     }
 
     private void initBluetooth() {
@@ -225,16 +196,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
                 startActivity(startSettingsActivity);
                 return true;
+            case R.id.menu_about:
+                Intent startAboutActivity = new Intent(this, Credits.class);
+                startActivity(startAboutActivity);
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void  checkPhotoPermission(){
-        if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST);
-        }else {
-            getImageFromGallery();
         }
     }
 
@@ -254,21 +220,6 @@ public class MainActivity extends AppCompatActivity {
             chatUtils.connect(bluetoothAdapter.getRemoteDevice(address));
         }
 
-//        if(requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK){
-//            try {
-//                final Uri imageUri = data.getData();
-//                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-//                final Bitmap image = BitmapFactory.decodeStream(imageStream);
-//                final ByteArrayOutputStream outImgStream = new ByteArrayOutputStream();
-//                image.compress(Bitmap.CompressFormat.JPEG, 50, outImgStream);
-//                final byte[] imageBytes = outImgStream.toByteArray();
-//                Pair<String, byte[]> pair = new Pair<>("", imageBytes) ;
-//                adapterMainChat.add(pair);
-//                chatUtils.write(imageBytes);
-//            }catch (FileNotFoundException e){
-//                e.printStackTrace();
-//            }
-//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -291,27 +242,6 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                MainActivity.this.finish();
-                            }
-                        }).show();
-            }
-        }
-        else if(requestCode == STORAGE_PERMISSION_REQUEST){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getImageFromGallery();
-            }else {
-                new AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setMessage("Memory permission is required.\nPlease grant")
-                        .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                checkPhotoPermission();
-                            }
-                        })
-                        .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.this.finish();
                             }
                         }).show();
@@ -340,12 +270,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private void getImageFromGallery(){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
     }
 
     @Override

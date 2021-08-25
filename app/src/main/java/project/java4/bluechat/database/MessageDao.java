@@ -20,5 +20,5 @@ public interface MessageDao {
     LiveData<List<Message>> getAll();
 
     @Query("SELECT * FROM Message WHERE conv_id=:conv_id")
-    LiveData<List<Message>> getAllFromConversation(long conv_id);
+    LiveData<List<Message>> getAllFromConversation(String conv_id);
 }
