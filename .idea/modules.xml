@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/BlueChat.iml" filepath="$PROJECT_DIR$/.idea/BlueChat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BlueChat.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BlueChat.app.iml" />
     </modules>
   </component>
 </project>

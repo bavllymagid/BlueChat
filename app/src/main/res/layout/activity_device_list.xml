@@ -18,21 +18,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_paired_devices"
-        android:textColor="@color/mainText" />
+        android:textColor="@color/mainText"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20sp"/>
 
     <ListView
         android:id="@+id/list_paired_devices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_available_devices"
-        android:textColor="@color/mainText" />
+        android:textColor="@color/mainText"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20sp"/>
 
     <ListView
         android:id="@+id/list_available_devices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"/>
 </LinearLayout>
