@@ -139,6 +139,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onChanged(List<project.java4.bluechat.model.Message> messages) {
                 adapterMainChat.setMessages(messages);
                 adapterMainChat.notifyDataSetChanged();
+                listMainChat.smoothScrollToPosition(adapterMainChat.getCount());
             }
         });
 
